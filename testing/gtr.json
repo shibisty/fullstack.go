@@ -1,0 +1,22 @@
+{
+    "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
+    "name": "fullstack-testing",
+    "version": "0.1.0",
+    "description": "Test helpers for fullstack applications: an in-memory HTTP client, ActingAs, response assertions",
+    "license": "MIT",
+    "repository": "github:shibisty/fullstack.go-testing",
+    "engines": {
+        "go": ">=1.22"
+    },
+    "devDependencies": {
+        "fullstack": "github:shibisty/fullstack.go",
+        "passport": "github:shibisty/passport.go"
+    },
+    "peerDependencies": {
+        "fullstack": "^0.1",
+        "passport": "^0.2"
+    },
+    "scripts": {
+        "test": "go test ./..."
+    }
+}
