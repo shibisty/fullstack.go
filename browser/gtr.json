@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
+    "name": "fullstack-browser",
+    "version": "0.1.0",
+    "description": "Browser tests for fullstack apps in Go: a headless Chrome through chromedp against the app's handler",
+    "license": "MIT",
+    "repository": "github:shibisty/fullstack.go-browser",
+    "engines": {
+        "go": ">=1.24"
+    },
+    "dependencies": {
+        "github.com/chromedp/chromedp": "^0.14.2"
+    },
+    "scripts": {
+        "test": "go test ./..."
+    }
+}
