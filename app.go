@@ -54,6 +54,12 @@ type Config struct {
 	WriteTimeout    time.Duration `env:"HTTP_WRITE_TIMEOUT" default:"30s"`
 	IdleTimeout     time.Duration `env:"HTTP_IDLE_TIMEOUT" default:"60s"`
 	ShutdownTimeout time.Duration `env:"HTTP_SHUTDOWN_TIMEOUT" default:"15s"`
+
+	// TrustedProxies are the reverse proxies whose ProxyHeader names the
+	// client (web.ParseTrustedProxies: CIDRs, addresses, "loopback",
+	// "private"). Empty: RemoteAddr is the client.
+	TrustedProxies string `env:"HTTP_TRUSTED_PROXIES"`
+	ProxyHeader    string `env:"HTTP_PROXY_HEADER" default:"X-Real-IP"` // or X-Forwarded-For
 }
 
 // Provider registers services and routes of one part of the application
@@ -112,7 +118,8 @@ type Options struct {
 
 // New creates the application: loads .env, reads Config, sets up the
 // logger (also as slog's default) and the router with Recover, RequestID
-// and AccessLog. The App itself and its Config, logger and router are in
+// and AccessLog (TrustProxy first when HTTP_TRUSTED_PROXIES is set). The
+// App itself and its Config, logger and router are in
 // the container (Make[*App], Make[*slog.Logger], Make[*web.Router]).
 func New(opts ...Options) (*App, error) {
 	var o Options
@@ -134,8 +141,20 @@ func New(opts ...Options) (*App, error) {
 		return nil, err
 	}
 	slog.SetDefault(log)
+	proxies, err := web.ParseTrustedProxies(cfg.TrustedProxies)
+	if err != nil {
+		return nil, fmt.Errorf("fullstack: HTTP_TRUSTED_PROXIES: %w", err)
+	}
+	switch http.CanonicalHeaderKey(cfg.ProxyHeader) {
+	case http.CanonicalHeaderKey(web.HeaderRealIP), http.CanonicalHeaderKey(web.HeaderForwardedFor):
+	default:
+		return nil, fmt.Errorf("fullstack: HTTP_PROXY_HEADER=%q: want X-Real-IP or X-Forwarded-For", cfg.ProxyHeader)
+	}
 	r := web.NewRouter()
 	r.SetLogger(log)
+	if len(proxies) > 0 {
+		r.Use(web.TrustProxy(proxies, web.ProxyOptions{Header: cfg.ProxyHeader}))
+	}
 	r.Use(web.Recover(), web.RequestID(), web.AccessLog(log))
 	a := &App{core: &core{Config: cfg, Log: log, Router: r, Stdout: os.Stdout, Stderr: os.Stderr,
 		c: container{entries: map[reflect.Type]*entry{}}, stopping: make(chan struct{})}}

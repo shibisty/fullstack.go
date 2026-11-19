@@ -5,16 +5,16 @@ standard library. `net/http` routing (Go 1.22 patterns), `html/template` views, 
 logging, configuration from the environment, a service container with providers.
 No dependencies beyond the standard library.
 
-Other parts are separate packages: `fullstack-validation`, `fullstack-orm` (database from
-the config, migrations, factories), `fullstack-passport` (guards, `auth` middleware),
-`fullstack-testing`.
+Other parts are separate packages: `@fullstack/validation`, `@fullstack/orm` (database from
+the config, migrations, factories), `@fullstack/passport` (guards, `auth` middleware),
+`@fullstack/testing`.
 
 ## Installation
 
 ```json
 {
     "dependencies": {
-        "fullstack": "github:shibisty/fullstack.go"
+        "fullstack": "^0.1"
     }
 }
 ```
@@ -82,6 +82,8 @@ func main() {
 | `HTTP_ADDR` | `:8080` | |
 | `HTTP_READ_TIMEOUT`, `HTTP_WRITE_TIMEOUT`, `HTTP_IDLE_TIMEOUT` | `15s`, `30s`, `60s` | |
 | `HTTP_SHUTDOWN_TIMEOUT` | `15s` | how long requests in flight may finish |
+| `HTTP_TRUSTED_PROXIES` | — | reverse proxies allowed to name the client: CIDRs, addresses, `loopback`, `private` ([Behind a reverse proxy](#behind-a-reverse-proxy)) |
+| `HTTP_PROXY_HEADER` | `X-Real-IP` | or `X-Forwarded-For` |
 
 Your own configuration is a struct read with `env.Decode`, usually in `config/*.go`:
 
@@ -165,6 +167,34 @@ r.Mount("/static", http.FileServerFS(static))
   (`Accept: application/json`) get `{"error": "..."}`, others plain text; `r.OnError` replaces this.
 - Named routes: `r.URL("admin.users.show", "user", 7)` → `/admin/users/7`.
 
+### Behind a reverse proxy
+
+Behind nginx (or a Kubernetes ingress) every connection comes from the proxy, so
+`r.RemoteAddr` — and everything built on it: passport's `httpauth.ClientIP`, login throttling,
+IP allow-lists — sees one address for all clients. Name the proxies you trust:
+
+```bash
+HTTP_TRUSTED_PROXIES=172.18.0.0/16   # the Docker network nginx is on; or "private", "loopback"
+```
+
+```nginx
+proxy_set_header X-Real-IP $remote_addr;
+```
+
+`fullstack.New` then puts `web.TrustProxy` first on the router. For a request whose connection
+comes from a trusted address, it replaces `RemoteAddr` with the client's address from `X-Real-IP`
+(as `ip:0`); `web.PeerAddr(r)` still returns the proxy's. A request from any other address keeps
+its `RemoteAddr` and loses the header, so a client cannot pick its own address by sending it. A
+trusted request with a missing, repeated or invalid header keeps the proxy's address.
+
+With `HTTP_PROXY_HEADER=X-Forwarded-For` the client is the right-most address in the list that is
+not a trusted proxy; addresses to its left were written by the client and are ignored. Without
+`fullstack.New`: `r.Use(web.TrustProxy(prefixes, web.ProxyOptions{...}))` with
+`web.ParseTrustedProxies(list)`.
+
+Trust only addresses that are always your proxy: a public load balancer's whole network, or
+`private` on a host where other containers are untrusted, lets them claim any address.
+
 ### Model binding
 
 ```go
@@ -207,7 +237,7 @@ so a template error is a clean 500.
 
 ### Rendering in the browser
 
-The engine can send its templates to the browser, so that a page swapped in by fullstack-bundler's
+The engine can send its templates to the browser, so that a page swapped in by @fullstack/bundler's
 navigation (`Navigate: true`) comes as data and is rendered there:
 
 - the router serves the template pack at `/__fullstack/templates`: every page's templates after
@@ -216,7 +246,7 @@ navigation (`Navigate: true`) comes as data and is rendered there:
 - `c.HTML(status, page, data)` answers a request that carries the pack's version
   (`X-Fullstack-Templates`) with `{"view": page, "data": data}` instead of the HTML; the browser
   renders it with the same escaping (text, attributes, URLs, JS, CSS) as the server would;
-- functions need a browser side: `dict` has one, fullstack-bundler's `assets`, `asset` and
+- functions need a browser side: `dict` has one, @fullstack/bundler's `assets`, `asset` and
   `island` too (`Funcs: assets.Funcs(), ClientFuncs: assets.ClientFuncs()`); a page calling any
   other function, or a page the browser fails to render (a method call such as `.When.Format`),
   is rendered by the server as before.
@@ -292,7 +322,7 @@ store.Purge("index") // when its data changes (a new note)
 ```
 
 A kept page has an ETag (a browser that has it gets a 304) and `Cache-Control: no-cache`, so
-fullstack-compress compresses it once at its maximal level. The key is the URL, the representation
+@fullstack/compress compresses it once at its maximal level. The key is the URL, the representation
 (HTML or page data) and `Cache.Vary`. Never kept: responses other than 200, ones that set a cookie,
 and pages holding a CSRF field, which would hand one visitor's token to the others; a page rendered
 for a user (not `Guest`, not `Public`) is never served from the store either.
@@ -319,7 +349,7 @@ func main() {
 ```bash
 go run . list                       # every command
 go run . routes:list
-go run . make:model BlogPost -m     # app/models/blog_post.go (+ its migration with fullstack-orm)
+go run . make:model BlogPost -m     # app/models/blog_post.go (+ its migration with @fullstack/orm)
 go run . make:controller Post       # app/http/controllers/post_controller.go, resource routes
 go run . make:middleware RequireAdmin
 go run . make:provider Billing
@@ -327,7 +357,7 @@ go run . make:seeder UserSeeder     # database/seeders
 go run . make:test Posts            # tests/posts_test.go
 ```
 
-Add your own with `app.AddCommand(fullstack.Command{Name: "report:send", Run: ...})`; fullstack-orm
+Add your own with `app.AddCommand(fullstack.Command{Name: "report:send", Run: ...})`; @fullstack/orm
 adds `migrate*`, `make:migration` and `db:seed`. The generated files come from
 `fullstack.MakeTemplates` into `fullstack.MakeDirs`; replace an entry to change them.
 

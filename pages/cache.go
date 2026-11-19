@@ -24,7 +24,7 @@ import (
 //	},
 //
 // Kept pages carry an ETag (a 304 for a browser that has the page), so a
-// compressing middleware (fullstack-compress) compresses them once at its
+// compressing middleware (fullstack/compress) compresses them once at its
 // maximal level. A page whose output holds a CSRF field is never kept: it
 // would hand one visitor's token to the others.
 type Cache struct {

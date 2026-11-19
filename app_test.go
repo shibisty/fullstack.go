@@ -24,7 +24,8 @@ import (
 func clearEnv(t *testing.T) {
 	t.Helper()
 	for _, k := range []string{"APP_NAME", "APP_ENV", "APP_DEBUG", "APP_URL", "LOG_LEVEL", "LOG_FORMAT", "HTTP_ADDR",
-		"HTTP_READ_TIMEOUT", "HTTP_WRITE_TIMEOUT", "HTTP_IDLE_TIMEOUT", "HTTP_SHUTDOWN_TIMEOUT"} {
+		"HTTP_READ_TIMEOUT", "HTTP_WRITE_TIMEOUT", "HTTP_IDLE_TIMEOUT", "HTTP_SHUTDOWN_TIMEOUT",
+		"HTTP_TRUSTED_PROXIES", "HTTP_PROXY_HEADER"} {
 		t.Setenv(k, "")
 		os.Unsetenv(k)
 	}
@@ -245,7 +246,8 @@ func TestFailures(t *testing.T) {
 	if err := f.Run(context.Background()); err == nil {
 		t.Fatal("bad address")
 	}
-	for _, bad := range []string{"LOG_LEVEL=loud", "LOG_FORMAT=xml", "APP_DEBUG=maybe"} {
+	for _, bad := range []string{"LOG_LEVEL=loud", "LOG_FORMAT=xml", "APP_DEBUG=maybe",
+		"HTTP_TRUSTED_PROXIES=nginx", "HTTP_PROXY_HEADER=Forwarded"} {
 		clearEnv(t)
 		p := filepath.Join(t.TempDir(), ".env")
 		os.WriteFile(p, []byte(bad), 0o600)
@@ -318,3 +320,33 @@ func TestStoppingEndsStreams(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTrustedProxies(t *testing.T) {
+	client := func(a *fullstack.App, remote, realIP string) string {
+		var got string
+		a.Router.Get("/ip", func(c *web.Ctx) error { got = c.R.RemoteAddr; return c.NoContent() })
+		h, err := a.Handler()
+		if err != nil {
+			t.Fatal(err)
+		}
+		req, _ := http.NewRequest("GET", "/ip", nil)
+		req.RemoteAddr = remote
+		req.Header.Set("X-Real-IP", realIP)
+		h.ServeHTTP(&discardWriter{h: http.Header{}}, req)
+		return got
+	}
+	a, _ := newApp(t, "HTTP_TRUSTED_PROXIES=172.18.0.0/16")
+	if got := client(a, "172.18.0.9:5000", "203.0.113.7"); got != "203.0.113.7:0" {
+		t.Errorf("behind a trusted proxy: RemoteAddr = %q", got)
+	}
+	b, _ := newApp(t)
+	if got := client(b, "172.18.0.9:5000", "203.0.113.7"); got != "172.18.0.9:5000" {
+		t.Errorf("no trusted proxies: RemoteAddr = %q", got)
+	}
+}
+
+type discardWriter struct{ h http.Header }
+
+func (w *discardWriter) Header() http.Header         { return w.h }
+func (w *discardWriter) Write(b []byte) (int, error) { return len(b), nil }
+func (w *discardWriter) WriteHeader(int)             {}

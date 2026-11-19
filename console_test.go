@@ -119,7 +119,7 @@ func TestMake(t *testing.T) {
 		{[]string{"make:middleware", "RequireAdmin"}, "app/http/middleware/require_admin.go", []string{"func RequireAdmin(next http.Handler)"}},
 		{[]string{"make:provider", "AppServiceProvider"}, "app/providers/app_service_provider.go", []string{"func (p *AppServiceProvider) Register"}},
 		{[]string{"make:seeder", "UserSeeder"}, "database/seeders/user_seeder.go", []string{"package seeders", "func UserSeeder(ctx context.Context"}},
-		{[]string{"make:test", "HTTPServer"}, "tests/http_server_test.go", []string{"package tests", "func TestHTTPServer"}},
+		{[]string{"make:test", "HTTPServer"}, "tests/http_server_test.go", []string{"package tests", "func TestHTTPServer", `apptest "fullstack/testing"`}},
 	} {
 		out.Reset()
 		if code, _ := a.Console(c.args); code != 0 {
@@ -147,7 +147,7 @@ func TestMake(t *testing.T) {
 	if !strings.Contains(errb.String(), "already exists") {
 		t.Fatal(errb)
 	}
-	// -m needs make:migration, which fullstack-orm adds.
+	// -m needs make:migration, which fullstack/orm adds.
 	errb.Reset()
 	if code, _ := a.Console([]string{"make:model", "-m", "Tag"}); code != 1 || !strings.Contains(errb.String(), "needs make:migration") {
 		t.Fatal(errb)
@@ -182,5 +182,23 @@ func TestMake(t *testing.T) {
 	defer func() { fullstack.MakeDirs["seeder"] = oldDir }()
 	if _, err := fullstack.Generate("seeder", "X"); err == nil {
 		t.Fatal("unwritable directory")
+	}
+}
+
+// make:test imports the testing package under the name gtr.json has: the
+// old "fullstack/testing" in a project that still uses it.
+func TestMakeTestFollowsGtrJSON(t *testing.T) {
+	dir := t.TempDir()
+	wd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(wd)
+	os.WriteFile("go.mod", []byte("module blog\n\ngo 1.22\n"), 0o644)
+	os.WriteFile("gtr.json", []byte(`{"name":"blog","devDependencies":{"fullstack/testing":"github:shibisty/fullstack.go-testing#^0.1"}}`), 0o644)
+	a, _, errb := consoleApp(t)
+	if code, _ := a.Console([]string{"make:test", "Home"}); code != 0 {
+		t.Fatal(errb)
+	}
+	if data, _ := os.ReadFile(filepath.Join("tests", "home_test.go")); !strings.Contains(string(data), `apptest "fullstack/testing"`) {
+		t.Fatal(string(data))
 	}
 }

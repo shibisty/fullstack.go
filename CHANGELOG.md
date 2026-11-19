@@ -2,7 +2,15 @@
 
 ## Unreleased
 
+### Changed
+- `make:test` imports `fullstack/testing` (@fullstack/testing), or `fullstack-testing` when the project's gtr.json still names that.
+
 ### Added
+- `web.TrustProxy`: behind a trusted reverse proxy, `RemoteAddr` becomes the client's address
+  from `X-Real-IP` (or the right-most untrusted address of `X-Forwarded-For`); the header is
+  dropped from requests of other peers. `web.PeerAddr`, `web.ParseTrustedProxies` (CIDRs,
+  addresses, `loopback`, `private`). `fullstack.New` installs it first when
+  `HTTP_TRUSTED_PROXIES` is set (`HTTP_PROXY_HEADER` picks the header).
 - `fullstack.App`: `.env` loading, `Config` from the environment (`APP_*`, `LOG_*`, `HTTP_*`),
   a `log/slog` logger (text or JSON, also slog's default), the router with `Recover`,
   `RequestID` and `AccessLog`, and `Run` / `Serve` with graceful shutdown on SIGINT/SIGTERM.
