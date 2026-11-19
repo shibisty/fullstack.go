@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0 — 2026-11-19
+
 ### Changed
 - Renamed from `fullstack-browser` to `@fullstack/browser` (gtr ADR-0012): `gtr add @fullstack/browser`, `import "fullstack/browser"`; published to the gtr registry. Dependencies on fullstack, passport, orm and migration packages are registry ranges instead of `github:` sources.
 
