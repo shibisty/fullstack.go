@@ -1,5 +1,5 @@
 // Package apptest tests fullstack applications through HTTP, in memory
-// (gtr package fullstack-testing):
+// (gtr package @fullstack/testing):
 //
 //	func TestDashboard(t *testing.T) {
 //	    app := bootstrap.NewApp()                         // your App with its providers
@@ -427,7 +427,7 @@ func (r *Response) AssertJSONCount(path string, n int) *Response {
 }
 
 // AssertJSONValidationErrors checks that the 422 body of
-// fullstack-validation ({"errors": {...}}) has errors for every field.
+// fullstack/validation ({"errors": {...}}) has errors for every field.
 func (r *Response) AssertJSONValidationErrors(fields ...string) *Response {
 	r.t.Helper()
 	errs, _ := r.JSONPath("errors")

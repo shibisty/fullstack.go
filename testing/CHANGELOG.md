@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- Renamed from `fullstack-testing` to `@fullstack/testing` (gtr ADR-0012): `gtr add @fullstack/testing`, `import "fullstack/testing"`; published to the gtr registry. Dependencies on fullstack, passport, orm and migration packages are registry ranges instead of `github:` sources.
+
 ### Added
 - `apptest.New(t, app)`: boots the application and sends requests to it in memory; a cookie jar
   between requests, the CSRF token sent on POST/PUT/PATCH/DELETE (`WithoutCSRF` to test refusals),

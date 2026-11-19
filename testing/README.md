@@ -1,4 +1,4 @@
-# fullstack-testing
+# @fullstack/testing
 
 Test helpers for [fullstack](https://github.com/shibisty/fullstack.go) applications, in the spirit of
 Laravel's HTTP tests: an in-memory client that keeps cookies and sends the CSRF token like a browser,
@@ -9,13 +9,13 @@ Laravel's HTTP tests: an in-memory client that keeps cookies and sends the CSRF 
 ```json
 {
     "devDependencies": {
-        "fullstack-testing": "github:shibisty/fullstack.go-testing"
+        "@fullstack/testing": "^0.2"
     }
 }
 ```
 
 ```go
-import apptest "fullstack-testing"
+import apptest "fullstack/testing"
 ```
 
 ## Usage
@@ -44,9 +44,9 @@ func TestNotes(t *testing.T) {
   tests that a route refuses requests without it. Get the cookie with a first GET.
 - `c.ActingAs(identity)` starts a passport session (the `web` guard); `c.ActingAsAPI(identity)` returns
   a client with a Bearer token (the `api` guard, needs `AUTH_JWT_SECRET`). The App must have
-  passport (`auth.Provider` of fullstack-passport).
+  passport (`auth.Provider` of @fullstack/passport).
 - `WithHeader`, `WithToken` and `WithoutCSRF` return a client that shares the cookies.
-- Database tests: `database.UseTransaction(t, app)` of fullstack-orm rolls everything back at the end.
+- Database tests: `database.UseTransaction(t, app)` of @fullstack/orm rolls everything back at the end.
 
 ## Assertions
 
@@ -58,7 +58,7 @@ func TestNotes(t *testing.T) {
 | `AssertHeader(k, v)`, `AssertCookie(name)` | headers and cookies of the response |
 | `AssertJSONPath("data.0.name", "Ann")` | a value at a dotted path; numbers by value, structs and maps by their JSON |
 | `AssertJSONMissing(path)`, `AssertJSONCount(path, n)` | absence; the length of an array or object (`""` is the root) |
-| `AssertJSONValidationErrors(fields...)` | the `errors` of a fullstack-validation 422 |
+| `AssertJSONValidationErrors(fields...)` | the `errors` of a @fullstack/validation 422 |
 
 Assertions report with `t.Errorf` (the test continues) and return the response, so they chain.
 `JSONPath`, `DecodeJSON`, `Status` and `Text` read the response for your own checks.
