@@ -1,4 +1,4 @@
-# fullstack-compress
+# @fullstack/compress
 
 Response compression for [fullstack](https://github.com/shibisty/fullstack.go) (and any `net/http`
 handler): zstd, brotli or gzip, as the client accepts, with two trade-offs:
@@ -11,7 +11,7 @@ handler): zstd, brotli or gzip, as the client accepts, with two trade-offs:
 ## Installation
 
 ```bash
-gtr add github:shibisty/fullstack.go-compress
+gtr add @fullstack/compress
 ```
 
 ## Use
@@ -39,7 +39,7 @@ Accept-Encoding` is set on everything compressible; the ETag of a compressed res
 | `Compressible` | `compress.Compressible` | which content types are compressed |
 
 **Secrets in compressed pages.** A page that holds a secret next to text an attacker can choose may
-leak the secret by its compressed size (BREACH). fullstack-passport's CSRF tokens are masked anew on
+leak the secret by its compressed size (BREACH). @fullstack/passport's CSRF tokens are masked anew on
 every page, so they never repeat; do the same for other secrets in HTML, or send such pages with
 `Cache-Control: no-transform`.
 

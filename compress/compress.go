@@ -1,5 +1,5 @@
 // Package compress compresses HTTP responses with zstd, brotli or gzip, as
-// the client accepts (gtr package fullstack-compress). It is plain net/http
+// the client accepts (gtr package @fullstack/compress). It is plain net/http
 // middleware:
 //
 //	app.Router.Use(compress.New(compress.Options{}))

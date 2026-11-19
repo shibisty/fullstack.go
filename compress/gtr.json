@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
-    "name": "fullstack-compress",
-    "version": "0.1.0",
+    "name": "@fullstack/compress",
+    "version": "0.2.0",
     "description": "Response compression for fullstack: zstd, brotli and gzip, fast for dynamic responses, maximal and cached for files and versioned ones",
     "license": "MIT",
     "repository": "github:shibisty/fullstack.go-compress",
