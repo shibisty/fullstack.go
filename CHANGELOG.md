@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.1 — 2026-11-19
+
 ### Changed
 - `make:test` imports `fullstack/testing` (@fullstack/testing), or `fullstack-testing` when the project's gtr.json still names that.
 

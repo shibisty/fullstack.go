@@ -1,13 +1,14 @@
 {
     "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
     "name": "fullstack",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "The application core of the GTR fullstack framework: config, container, router, views, server",
     "license": "MIT",
     "repository": "github:shibisty/fullstack.go",
     "engines": {
         "go": ">=1.22"
     },
+    "dependencies": {},
     "scripts": {
         "test": "go test ./..."
     }
