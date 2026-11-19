@@ -1,5 +1,5 @@
 // Package browser runs end-to-end tests of a web app in a headless Chrome,
-// from Go tests (gtr package fullstack-browser). The app's handler is
+// from Go tests (gtr package @fullstack/browser). The app's handler is
 // served by an httptest server; Chrome is driven through the DevTools
 // protocol (chromedp), so the tests need no Node.js:
 //

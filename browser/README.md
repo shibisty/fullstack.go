@@ -1,4 +1,4 @@
-# fullstack-browser
+# @fullstack/browser
 
 End-to-end tests of a [fullstack](https://github.com/shibisty/fullstack.go) app (or any `http.Handler`)
 in a headless Chrome, written as ordinary Go tests — no Node.js, no Playwright. The app is served by
@@ -7,7 +7,7 @@ in a headless Chrome, written as ordinary Go tests — no Node.js, no Playwright
 ## Installation
 
 ```bash
-gtr add -D github:shibisty/fullstack.go-browser
+gtr add -D @fullstack/browser
 ```
 
 Needs Go 1.24+ (chromedp) and Chrome, Chromium or Edge on the machine; GitHub's runners have Chrome.
