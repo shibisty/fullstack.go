@@ -3,6 +3,7 @@ package fullstack
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -122,7 +123,7 @@ func {{.Name}}(ctx context.Context, app *fullstack.App) error {
 import (
 	"testing"
 
-	apptest "fullstack-testing"
+	apptest "{{.Testing}}"
 )
 
 func Test{{.Name}}(t *testing.T) {
@@ -167,7 +168,7 @@ func makeCommand(kind, usage, desc string) Command {
 			mig, ok := a.commands["make:migration"]
 			a.mu.Unlock()
 			if !ok {
-				return errors.New("make:model -m needs make:migration (fullstack-orm's database.Provider)")
+				return errors.New("make:model -m needs make:migration (fullstack/orm's database.Provider)")
 			}
 			return mig.Run(context.Background(), a, []string{"create_" + tableName(fs.Arg(0)) + "_table"})
 		}
@@ -195,7 +196,7 @@ func Generate(kind, name string) (string, error) {
 	}
 	snake := snakeCase(name)
 	data := map[string]string{
-		"Name": name, "Snake": snake, "Table": tableName(name), "Package": pkg, "Module": modulePath(),
+		"Name": name, "Snake": snake, "Table": tableName(name), "Package": pkg, "Module": modulePath(), "Testing": testingImport(),
 		"Var": string(unicode.ToLower(rune(name[0]))) + name[1:],
 	}
 	var buf bytes.Buffer
@@ -255,6 +256,29 @@ func tableName(name string) string {
 }
 
 // modulePath reads the module path from ./go.mod ("" without one).
+// testingImport is the import path of the testing package the project
+// depends on: "fullstack/testing" (@fullstack/testing), or the old
+// "fullstack/testing" when gtr.json still names that.
+func testingImport() string {
+	data, err := os.ReadFile("gtr.json")
+	if err != nil {
+		return "fullstack/testing"
+	}
+	var m struct {
+		Dependencies    map[string]string `json:"dependencies"`
+		DevDependencies map[string]string `json:"devDependencies"`
+	}
+	if json.Unmarshal(data, &m) == nil {
+		if _, old := m.DevDependencies["fullstack/testing"]; old {
+			return "fullstack/testing"
+		}
+		if _, old := m.Dependencies["fullstack/testing"]; old {
+			return "fullstack/testing"
+		}
+	}
+	return "fullstack/testing"
+}
+
 func modulePath() string {
 	data, err := os.ReadFile("go.mod")
 	if err != nil {
