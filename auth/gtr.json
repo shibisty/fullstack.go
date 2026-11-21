@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
     "name": "@fullstack/passport",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "passport for fullstack: auth provider, guards, auth/guest/CSRF/throttle middleware, login helpers",
     "license": "MIT",
     "repository": {
