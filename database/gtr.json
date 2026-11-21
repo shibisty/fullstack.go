@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
     "name": "@fullstack/orm",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "orm and migrations for fullstack: database provider, repositories, route model binding, migrate and db:seed commands",
     "license": "MIT",
     "repository": {
