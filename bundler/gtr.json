@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
     "name": "@fullstack/bundler",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Frontend builds for fullstack without Node.js: TypeScript, JSX and CSS through esbuild, hashed files, a manifest, live rebuilds",
     "license": "MIT",
     "repository": {
