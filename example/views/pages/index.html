@@ -1,0 +1,19 @@
+{{define "content"}}
+<h1>Notes</h1>
+<p class="note-count" data-note-count></p>
+{{if .Notes}}
+{{island "NoteSearch" (dict "notes" .Notes)}}
+<noscript><ul>{{range .Notes}}<li>{{.Text}} <a href="/api/notes/{{.ID}}">json</a></li>{{end}}</ul></noscript>
+{{else}}
+<ul><li>No notes yet.</li></ul>
+{{end}}
+{{if .User}}
+<form method="post" action="/notes">
+  {{.CSRFField}}
+  <input name="text" placeholder="A new note" required>
+  <button>Add</button>
+</form>
+{{else}}
+<p><a href="/login?redirect=/">Log in</a> to add notes (ann@example.com / secret).</p>
+{{end}}
+{{end}}

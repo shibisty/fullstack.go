@@ -1,0 +1,12 @@
+{{define "title"}}Log in · {{.App}}{{end}}
+{{define "content"}}
+<h1>Log in</h1>
+{{if .Error}}<p style="color:#b00">{{.Error}}</p>{{end}}
+<form method="post" action="/login{{if .Redirect}}?redirect={{.Redirect}}{{end}}">
+  {{.CSRFField}}
+  <p><label>Email <input name="email" type="email" value="{{.Email}}" required autofocus></label></p>
+  <p><label>Password <input name="password" type="password" required></label></p>
+  <button>Log in</button>
+</form>
+<p>Demo account: ann@example.com / secret</p>
+{{end}}

@@ -1,0 +1,34 @@
+{
+    "name": "fullstack-dev",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Local workspace of the fullstack family (ADR-0006, ADR-0009)",
+    "engines": {
+        "go": ">=1.22"
+    },
+    "dependencies": {
+        "passport": "file:../passport.go/core",
+        "@passport/local": "file:../passport.go/strategies/local",
+        "orm": "file:../orm.go/core",
+        "migration": "file:../migration.go/core",
+        "@migration/orm": "file:../migration.go/drivers/orm"
+    },
+    "workspaces": [
+        "core",
+        "validation",
+        "auth",
+        "database",
+        "testing",
+        "bundler",
+        "compress",
+        "browser",
+        "example"
+    ],
+    "scripts": {
+        "test": "gtr run -r test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git"
+    }
+}

@@ -4,7 +4,11 @@
     "version": "0.2.0",
     "description": "Test helpers for fullstack applications: an in-memory HTTP client, ActingAs, response assertions",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go-testing",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "testing"
+    },
     "engines": {
         "go": ">=1.22"
     },

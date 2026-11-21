@@ -1,0 +1,4 @@
+body { font: 16px/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; background: red; }
+nav form { display: inline; }
+.note-count { color: #666; font-size: .9rem; }
+.note-search input { width: 100%; padding: .4rem; }

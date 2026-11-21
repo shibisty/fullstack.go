@@ -4,7 +4,11 @@
     "version": "0.2.0",
     "description": "Struct validation by tags and request binding (JSON, forms) with 422 errors for fullstack",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go-validation",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "validation"
+    },
     "engines": {
         "go": ">=1.22"
     },

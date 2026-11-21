@@ -1,0 +1,13 @@
+{{define "layout"}}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{block "title" .}}{{.App}}{{end}}</title>
+  {{assets "resources/css/app.css" "resources/js/app.ts"}}
+</head>
+<body>
+  {{template "nav" .}}
+  <main>{{block "content" .}}{{end}}</main>
+</body>
+</html>{{end}}

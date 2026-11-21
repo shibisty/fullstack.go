@@ -4,7 +4,11 @@
     "version": "0.2.0",
     "description": "passport for fullstack: auth provider, guards, auth/guest/CSRF/throttle middleware, login helpers",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go-passport",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "auth"
+    },
     "engines": {
         "go": ">=1.22"
     },

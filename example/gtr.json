@@ -1,0 +1,27 @@
+{
+    "name": "fullstack-example",
+    "version": "0.0.0",
+    "description": "A small application on fullstack (local, not published)",
+    "private": true,
+    "engines": {
+        "go": ">=1.22"
+    },
+    "dependencies": {
+        "fullstack": "workspace:*",
+        "@fullstack/bundler": "workspace:*",
+        "@fullstack/passport": "workspace:*",
+        "@fullstack/validation": "workspace:*",
+        "passport": "^0.2",
+        "@passport/local": "^0.2",
+        "preact": "npm:^11.2.0",
+        "@fullstack/compress": "workspace:*"
+    },
+    "devDependencies": {
+        "@fullstack/testing": "workspace:*",
+        "@fullstack/browser": "workspace:*"
+    },
+    "scripts": {
+        "dev": "gtr dev",
+        "test": "go test ./..."
+    }
+}

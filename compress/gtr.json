@@ -4,7 +4,11 @@
     "version": "0.2.0",
     "description": "Response compression for fullstack: zstd, brotli and gzip, fast for dynamic responses, maximal and cached for files and versioned ones",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go-compress",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "compress"
+    },
     "engines": {
         "go": ">=1.22"
     },

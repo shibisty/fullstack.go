@@ -1,0 +1,6 @@
+{{define "nav"}}<nav>
+  <strong>{{.App}}</strong> · <a href="/">Notes</a> · <a href="/api/notes">API</a> ·
+  {{if .User}}{{.User.Name}}
+  <form method="post" action="/logout" style="display:inline">{{.CSRFField}}<button>Log out</button></form>
+  {{else}}<a href="/login">Log in</a>{{end}}
+</nav>{{end}}

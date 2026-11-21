@@ -4,7 +4,11 @@
     "version": "0.2.0",
     "description": "orm and migrations for fullstack: database provider, repositories, route model binding, migrate and db:seed commands",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go-orm",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "database"
+    },
     "engines": {
         "go": ">=1.22"
     },

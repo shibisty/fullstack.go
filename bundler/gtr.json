@@ -4,7 +4,11 @@
     "version": "0.2.0",
     "description": "Frontend builds for fullstack without Node.js: TypeScript, JSX and CSS through esbuild, hashed files, a manifest, live rebuilds",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go-bundler",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "bundler"
+    },
     "engines": {
         "go": ">=1.22"
     },

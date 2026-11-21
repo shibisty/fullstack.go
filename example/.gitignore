@@ -1,0 +1,8 @@
+.env
+public/build/*
+!public/build/.gitkeep
+public/prerendered/*
+!public/prerendered/.gitkeep
+gtr_modules/
+go.mod
+go.work

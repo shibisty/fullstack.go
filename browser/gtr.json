@@ -4,7 +4,11 @@
     "version": "0.2.0",
     "description": "Browser tests for fullstack apps in Go: a headless Chrome through chromedp against the app's handler",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go-browser",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "browser"
+    },
     "engines": {
         "go": ">=1.24"
     },

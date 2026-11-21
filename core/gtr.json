@@ -4,7 +4,11 @@
     "version": "0.1.1",
     "description": "The application core of the GTR fullstack framework: config, container, router, views, server",
     "license": "MIT",
-    "repository": "github:shibisty/fullstack.go",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shibisty/fullstack.go.git",
+        "directory": "core"
+    },
     "engines": {
         "go": ">=1.22"
     },
