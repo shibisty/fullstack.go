@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/shibisty/gtr/main/schema/gtr.schema.json",
     "name": "@fullstack/testing",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Test helpers for fullstack applications: an in-memory HTTP client, ActingAs, response assertions",
     "license": "MIT",
     "repository": {
